@@ -8,24 +8,29 @@ def main():
    
     #define global variables
     board = createBoard()
-    currentPlayer = " "
+    currentPlayer = "X"
     winner = None
     gameRunning = True
+
     while gameRunning:
         createBoard()
         printBoard(board)
-        playerInput(board)
-        checkWin()
+        playerInput(currentPlayer, board)
+        checkWin(board)
         checkDraw(board)
-        switchPlayers()
-        computer(board)
-        checkWin()
+        checkHorizontal(board)
+        switchPlayers(currentPlayer)
+        computer(currentPlayer, board)
+        checkWin(board)
         checkDraw(board)
+
+# create the game board
 def createBoard():
     board = ["-", "-", "-",
             "-", "-", "-",
             "-", "-", "-"]
     return board
+
 #print game board
 def printBoard(board):
     print()
@@ -36,15 +41,19 @@ def printBoard(board):
     print(board[6] + " | " + board[7] + " | " + board[8])
     print()
 
-#take player input
-def playerInput(board):
-    inp = int(input("Enter a number from 1-9: "))
+
+# take player input
+def playerInput(currentPlayer, board):
+    # global currentPlayer
+    global gameRunning
+    inp = int(input("Please enter a number from 1-9: "))
     if inp >= 1 and inp <= 9 and board[inp-1] == "-":
         board[inp-1] = currentPlayer
     else:
         print("Oops! player already entered that spot")
 
-#check for win or Draw
+
+# #check for win or Draw
 
 def checkHorizontal(board):
     #use variable outside function"
@@ -80,7 +89,7 @@ def checkDiagonal(board):
         winner = board[2]
         return True
 
-#check for a tie
+# #check for a tie
 def checkDraw(board):
     global gameRunning
     if "-" not in board:
@@ -91,22 +100,25 @@ def checkDraw(board):
 def checkWin(board):
     if checkDiagonal(board) or checkHorizontal(board) or checkRow(board):
         print(f"The winner is: {winner}")
-    
-#switch the player
-def switchPlayers():
-    global currentPlayer
-    if currentPlayer == "X":
-        currentPlayer = "0"
-    else:
-        currentPlayer = "X"
 
+
+
+#switch the player
+def switchPlayers(currentPlayer):
+    if currentPlayer == "X":
+        # currentPlayer = "O"
+        return "O"
+    else:
+        # currentPlayer = "X"
+        return "X"
 #make computer play 
-def computer(board):
-    while currentPlayer == "0":
+def computer(currentPlayer, board):
+    while currentPlayer == "O":
         position = random.randint(0, 8)
         if board[position] == "-":
-            board[position] = "0"
-            switchPlayers()
+            board[position] = "O"
+            switchPlayers(currentPlayer)
+
 
 #check for win or Draw
 if __name__ == "__main__":
